@@ -1,0 +1,39 @@
+const categories = ['Laptop', 'Gaming', 'PC']
+const priceRanges = [
+  { label: '< 20 triệu', value: 'lt20' },
+  { label: '20-35 triệu', value: '20-35' },
+  { label: '> 35 triệu', value: 'gt35' },
+]
+
+export default function Sidebar({ className }) {
+  return (
+    <aside className={`bg-white rounded-xl shadow p-6 h-fit font-sans ${className || ''}`}>
+      <div>
+        <h3 className="font-semibold mb-3 text-blue-700 text-lg">Danh mục</h3>
+        <ul className="space-y-2">
+          {categories.map(cat => (
+            <li key={cat}>
+              <label className="flex items-center space-x-2 sidebar-category cursor-pointer hover:text-blue-600 transition">
+                <input type="checkbox" className="accent-blue-600 focus:ring-2 focus:ring-blue-400" />
+                <span>{cat}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="mt-6">
+        <h3 className="font-semibold mb-3 text-blue-700 text-lg">Khoảng giá</h3>
+        <ul className="space-y-2">
+          {priceRanges.map(range => (
+            <li key={range.value}>
+              <label className="flex items-center space-x-2 sidebar-price cursor-pointer hover:text-blue-600 transition">
+                <input type="radio" name="price" className="accent-blue-600 focus:ring-2 focus:ring-blue-400" />
+                <span>{range.label}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
+  )
+}
