@@ -12,7 +12,7 @@ export default function Footer() {
           <ul className="space-y-2 text-gray-300">
             <li className="flex items-center gap-2"><FaEnvelope /> <a href="mailto:fevipshop@email.com" className="hover:text-blue-200">fevipshop@email.com</a></li>
             <li className="flex items-center gap-2"><FaPhoneAlt /> <a href="tel:0123456789" className="hover:text-blue-200">0123 456 789</a></li>
-            <li className="flex items-center gap-2"><FaMapMarkerAlt /> 1234 Đường ABC, Hà Nội</li>
+            <li className="flex items-center gap-2"><FaMapMarkerAlt /> 123 Đường ABC, Hà Nội</li>
           </ul>
         </div>
 
