@@ -1,14 +1,41 @@
 import { useState, useEffect, useRef } from 'react'
 import products from '../assets/data/products.json'
-import { FiSearch } from 'react-icons/fi'
+import { FiSearch, FiClock, FiX } from 'react-icons/fi'
+
+import { Link } from 'react-router-dom'
 
 export default function Header({ onSearch }) {
   const [cartCount] = useState(0)
   const [show, setShow] = useState(true)
   const [searchKeyword, setSearchKeyword] = useState('')
   const [suggestions, setSuggestions] = useState([])
-  const lastScroll = useRef(window.scrollY)
+  const [history, setHistory] = useState([])
+  const [dropdownOpen, setDropdownOpen] = useState(false)
 
+  const lastScroll = useRef(window.scrollY)
+  const inputRef = useRef(null)
+  const dropdownRef = useRef(null)
+
+  // Lấy lịch sử từ localStorage
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('searchHistory')) || []
+    setHistory(saved)
+  }, [])
+
+  // Cập nhật gợi ý khi nhập
+  useEffect(() => {
+    if (searchKeyword.trim().length >= 2) {
+      const keyword = searchKeyword.toLowerCase()
+      const matched = products.filter(p =>
+        p.name.toLowerCase().includes(keyword)
+      ).slice(0, 5)
+      setSuggestions(matched)
+    } else {
+      setSuggestions([])
+    }
+  }, [searchKeyword])
+
+  // Hiệu ứng ẩn hiện header khi scroll
   useEffect(() => {
     const handleScroll = () => {
       const current = window.scrollY
@@ -23,31 +50,66 @@ export default function Header({ onSearch }) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Đóng dropdown khi click ra ngoài
   useEffect(() => {
-    if (searchKeyword.length >= 2) {
-      const keyword = searchKeyword.toLowerCase()
-      const matched = products.filter(p =>
-        p.name.toLowerCase().includes(keyword)
-      ).slice(0, 5)
-      setSuggestions(matched)
-    } else {
-      setSuggestions([])
+    const handleClickOutside = (e) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target) &&
+        !inputRef.current.contains(e.target)
+      ) {
+        setDropdownOpen(false)
+      }
     }
-  }, [searchKeyword])
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // Lưu vào lịch sử
+  const saveToHistory = (keyword) => {
+    let updated = [...history]
+    const exist = updated.indexOf(keyword)
+    if (exist !== -1) updated.splice(exist, 1)
+    updated.unshift(keyword)
+    if (updated.length > 10) updated.pop()
+    setHistory(updated)
+    localStorage.setItem('searchHistory', JSON.stringify(updated))
+  }
 
   const handleSuggestionClick = (item) => {
     setSearchKeyword(item.name)
     setSuggestions([])
+    setDropdownOpen(false)
+    saveToHistory(item.name)
     onSearch(item.name)
   }
 
   const handleSearchClick = () => {
-    if (searchKeyword.trim() === '') {
-      onSearch('') // reset danh sách
-    } else {
-      onSearch(searchKeyword.trim()) // tìm bằng từ khoá hiện tại
-      setSuggestions([]) // ẩn gợi ý
+    const keyword = searchKeyword.trim()
+    if (keyword === '') {
+      setSuggestions([])
+      setDropdownOpen(false)
+      onSearch('')
+      return
     }
+
+    saveToHistory(keyword)
+    onSearch(keyword)
+    setSuggestions([])
+    setDropdownOpen(false)
+  }
+
+  const handleHistoryClick = (keyword) => {
+    setSearchKeyword(keyword)
+    saveToHistory(keyword)
+    onSearch(keyword)
+    setDropdownOpen(false)
+  }
+
+  const handleDeleteHistory = (keyword) => {
+    const updated = history.filter(item => item !== keyword)
+    setHistory(updated)
+    localStorage.setItem('searchHistory', JSON.stringify(updated))
   }
 
   return (
@@ -58,18 +120,22 @@ export default function Header({ onSearch }) {
       style={{ willChange: 'transform' }}
     >
       <div className="flex items-center mb-2 md:mb-0">
-        <span className="font-bold text-2xl text-blue-600 tracking-wide">FEVIP Shop</span>
+          <Link to="/" className="font-bold text-2xl text-blue-600 tracking-wide">
+            FEVIP Shop
+          </Link>
       </div>
 
       <div className="w-full max-w-lg relative mx-4 mb-2 md:mb-0">
         <input
+          ref={inputRef}
           type="text"
           placeholder="Tìm kiếm sản phẩm..."
           className="w-full px-3 py-2 pr-10 border border-blue-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 text-base"
           value={searchKeyword}
           onChange={e => setSearchKeyword(e.target.value)}
+          onFocus={() => setDropdownOpen(true)}
         />
-        {/* Icon nút tìm kiếm */}
+
         <button
           onClick={handleSearchClick}
           className="absolute right-2 top-1/2 -translate-y-1/2 text-blue-600 hover:text-blue-800"
@@ -78,18 +144,56 @@ export default function Header({ onSearch }) {
           <FiSearch size={20} />
         </button>
 
-        {suggestions.length > 0 && (
-          <ul className="absolute left-0 right-0 bg-white border border-gray-300 rounded mt-1 shadow z-[9999]">
-            {suggestions.map(item => (
-              <li
-                key={item.id}
-                className="px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm"
-                onClick={() => handleSuggestionClick(item)}
-              >
-                {item.name}
-              </li>
-            ))}
-          </ul>
+        {dropdownOpen && (history.length > 0 || suggestions.length > 0) && (
+          <div
+            ref={dropdownRef}
+            className="absolute left-0 right-0 bg-white border border-gray-300 rounded mt-1 shadow z-[9999] max-h-96 overflow-y-auto"
+          >
+            {/* Lịch sử tìm kiếm */}
+            {history.length > 0 && (
+              <>
+                <div className="px-3 py-2 text-sm font-semibold text-gray-500">Lịch sử tìm kiếm</div>
+                <ul>
+                  {history.map((item, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center justify-between px-3 py-2 hover:bg-blue-50 text-sm"
+                    >
+                      <div
+                        className="flex items-center gap-2 cursor-pointer flex-1"
+                        onClick={() => handleHistoryClick(item)}
+                      >
+                        <FiClock className="text-gray-400" />
+                        {item}
+                      </div>
+                      <FiX
+                        className="text-gray-400 cursor-pointer hover:text-red-500"
+                        onClick={() => handleDeleteHistory(item)}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {/* Gợi ý */}
+            {suggestions.length > 0 && (
+              <>
+                <div className="px-3 pt-3 text-sm font-semibold text-gray-500 border-t border-gray-200">Gợi ý</div>
+                <ul>
+                  {suggestions.map(item => (
+                    <li
+                      key={item.id}
+                      className="px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm"
+                      onClick={() => handleSuggestionClick(item)}
+                    >
+                      {item.name}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
         )}
       </div>
 

@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 
 const navs = [
-  { name: 'Trang Chủ', href: '#' },
-  { name: 'Cửa Hàng', href: '#' },
-  { name: 'Giỏ Hàng', href: '#' },
-  { name: 'Thanh Toán', href: '#' },
+  { name: 'Trang Chủ', href: '/' },
+  { name: 'Cửa Hàng', href: '/shop' },
+  { name: 'Giỏ Hàng', href: '/cart' },
+  { name: 'Thanh Toán', href: '/checkout' },
 ]
 
 export default function Nav() {
@@ -21,7 +22,6 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Đóng menu khi đổi kích thước lên desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) setOpen(false)
@@ -45,8 +45,8 @@ export default function Nav() {
       <ul className="hidden md:flex justify-center space-x-4 py-2">
         {navs.map((nav, idx) => (
           <li key={nav.name}>
-            <a
-              href={nav.href}
+            <Link
+              to={nav.href}
               className={`px-4 py-2 rounded-lg transition font-medium focus:outline-none focus:ring-2 focus:ring-white/70 ${
                 active === idx
                   ? scrolled
@@ -60,10 +60,11 @@ export default function Nav() {
               tabIndex={0}
             >
               {nav.name}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
+
       {/* Mobile nav */}
       <div className="md:hidden flex items-center justify-between px-2 py-2 relative">
         <div className="font-bold text-lg">{navs[active]?.name}</div>
@@ -80,8 +81,8 @@ export default function Nav() {
           <ul className="absolute left-0 top-full w-full bg-white shadow-lg rounded-b z-50 animate-fade-in-down">
             {navs.map((nav, idx) => (
               <li key={nav.name}>
-                <a
-                  href={nav.href}
+                <Link
+                  to={nav.href}
                   className={`block px-4 py-3 border-b last:border-b-0 font-medium transition ${
                     active === idx
                       ? 'bg-blue-600 text-white'
@@ -94,7 +95,7 @@ export default function Nav() {
                   tabIndex={0}
                 >
                   {nav.name}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
