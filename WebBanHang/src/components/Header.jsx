@@ -1,16 +1,16 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import products from '../assets/data/products.json'
 import { FiSearch, FiClock, FiX } from 'react-icons/fi'
-
 import { Link } from 'react-router-dom'
+import { CartContext } from '../context/CartContext' // Thêm dòng này
 
 export default function Header({ onSearch }) {
-  const [cartCount] = useState(0)
   const [show, setShow] = useState(true)
   const [searchKeyword, setSearchKeyword] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [history, setHistory] = useState([])
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const { cartCount } = useContext(CartContext); // Thêm dòng này
 
   const lastScroll = useRef(window.scrollY)
   const inputRef = useRef(null)
@@ -197,13 +197,15 @@ export default function Header({ onSearch }) {
         )}
       </div>
 
-      <div className="flex items-center">
-        <button className="relative text-2xl btn-cta px-3 py-2" aria-label="Giỏ hàng">
-          <span role="img" aria-label="cart">🛒</span>
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">
+      {/* Nút giỏ hàng căn phải, căn giữa theo chiều dọc */}
+      <div className="flex items-center ml-auto">
+        <Link to="/cart" className="relative flex items-center justify-center text-2xl btn-cta px-3 py-2" aria-label="Giỏ hàng">
+          <span role="img" aria-label="cart" className="text-2xl">🛒</span>
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-2 py-0.5 flex items-center justify-center font-bold shadow"
+            style={{ minWidth: 20, height: 20, fontSize: 12 }}>
             {cartCount}
           </span>
-        </button>
+        </Link>
       </div>
     </header>
   )
