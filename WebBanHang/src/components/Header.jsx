@@ -198,7 +198,7 @@ export default function Header({ onSearch }) {
       </div>
 
       {/* Nút giỏ hàng căn phải, căn giữa theo chiều dọc */}
-      <div className="flex items-center ml-auto">
+      <div className="flex items-center ml-auto hidden sm:block">
         <Link to="/cart" className="relative flex items-center justify-center text-2xl btn-cta px-3 py-2" aria-label="Giỏ hàng">
           <span role="img" aria-label="cart" className="text-2xl">🛒</span>
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-2 py-0.5 flex items-center justify-center font-bold shadow"
