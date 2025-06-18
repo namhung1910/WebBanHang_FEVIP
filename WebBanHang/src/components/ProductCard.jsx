@@ -38,7 +38,7 @@ export default function ProductCard({ product }) {
       {/* Thẻ sản phẩm */}
       <div
         onClick={() => setShowModal(true)}
-        className="bg-white rounded-xl shadow p-4 flex flex-col h-full min-h-[370px] max-w-xs mx-auto cursor-pointer hover:shadow-lg transition"
+        className="bg-white rounded-xl shadow p-4 flex flex-col h-full w-full min-h-[320px] sm:min-h-[370px] max-w-full mx-auto cursor-pointer hover:shadow-lg transition"
       >
         <img
           src={product.image}
