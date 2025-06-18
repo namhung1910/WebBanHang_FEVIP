@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { CartContext } from '../context/CartContext'
 
 const navs = [
   { name: 'Trang Chủ', href: '/' },
@@ -9,6 +10,7 @@ const navs = [
 ]
 
 export default function Nav() {
+  const { cartCount } = useContext(CartContext)
   const [active, setActive] = useState(0)
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
@@ -101,6 +103,7 @@ export default function Nav() {
           </ul>
         )}
       </div>
+
     </nav>
   )
 }

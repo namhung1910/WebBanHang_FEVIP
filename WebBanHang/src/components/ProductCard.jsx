@@ -1,7 +1,37 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { CartContext } from '../context/CartContext'
+import { useNavigate } from 'react-router-dom'
 
 export default function ProductCard({ product }) {
   const [showModal, setShowModal] = useState(false)
+  const { addToCart } = useContext(CartContext)
+  const navigate = useNavigate()
+  const [showAddedMsg, setShowAddedMsg] = useState(false)
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation()
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      // ...thêm thuộc tính khác nếu cần
+    })
+    setShowAddedMsg(true)
+    setTimeout(() => setShowAddedMsg(false), 1500)
+  }
+
+  const handleBuyNow = (e) => {
+    e.stopPropagation()
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      // ...thêm thuộc tính khác nếu cần
+    })
+    navigate('/checkout')
+  }
 
   return (
     <>
@@ -22,9 +52,17 @@ export default function ProductCard({ product }) {
             {product.price.toLocaleString()}₫
           </div>
           <div className="mt-auto">
-            <button className="mt-2 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition w-full">
+            <button
+              className="mt-2 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition w-full"
+              onClick={handleAddToCart}
+            >
               Thêm vào giỏ
             </button>
+            {showAddedMsg && (
+              <div className="mt-2 text-green-600 text-sm text-center animate-fade-in">
+                Sản phẩm đã được thêm vào giỏ hàng
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -60,12 +98,23 @@ export default function ProductCard({ product }) {
                   {product.price.toLocaleString()}₫
                 </div>
                 <div className="flex gap-2">
-                  <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+                  <button
+                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+                    onClick={handleBuyNow}
+                  >
                     Mua ngay
                   </button>
-                  <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                  <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                    onClick={handleAddToCart}
+                  >
                     Thêm vào giỏ
                   </button>
+                  {showAddedMsg && (
+                    <div className="ml-2 text-green-600 text-sm self-center animate-fade-in">
+                      Sản phẩm đã được thêm vào giỏ hàng
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
