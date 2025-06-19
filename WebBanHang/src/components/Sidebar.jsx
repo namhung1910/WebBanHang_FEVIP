@@ -28,7 +28,14 @@ export default function Sidebar({ className, onFilterChange }) {
   }
 
   return (
-    <aside className={`bg-white rounded-xl shadow p-6 h-fit font-sans ${className || ''}`}>
+    <aside
+      className={`
+        bg-white rounded-xl shadow p-6 h-fit font-sans
+        w-full mb-4
+        md:w-64 md:mb-0
+        ${className || ''}
+      `}
+    >
       <div>
         <h3 className="font-semibold mb-3 text-blue-700 text-lg">Danh mục</h3>
         <ul className="space-y-2">

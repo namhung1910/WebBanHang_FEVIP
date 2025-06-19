@@ -61,14 +61,11 @@ export default function Home() {
       <Nav />
       <Banner />
       <LaptopBrandBar selected={selectedBrand} onSelect={setSelectedBrand} />
-      <div className="flex flex-1 w-full max-w-7xl mx-auto px-2 md:px-4 py-4 gap-4">
-        <Sidebar
-          className="hidden lg:block w-64 mr-4"
-          onFilterChange={setFilters}
-        />
-        <main className="flex-1">
+      <div className="flex flex-col md:flex-row gap-4">
+        <Sidebar onFilterChange={setFilters} />
+        <div className="flex-1">
           <ProductGrid products={filteredProducts} />
-        </main>
+        </div>
       </div>
       <Footer />
     </div>
