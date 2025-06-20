@@ -8,7 +8,7 @@ export default function LaptopBrandBar({ onSelect, selected }) {
           <button
             key={brand}
             className={`bg-white border border-gray-300 rounded-full px-4 py-1 text-sm transition
-              ${selected === brand ? 'bg-blue-600 text-white border-blue-600 shadow' : 'hover:bg-blue-500 hover:text-white'}
+              ${selected === brand ? 'bg-blue-600 text-blue-500 border-blue-600 shadow' : 'hover:bg-blue-500 hover:text-white'}
             `}
             onClick={() => onSelect?.(brand)}
             type="button"
