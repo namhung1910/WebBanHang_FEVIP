@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 const banners = [
   {
-    img: 'https://truonggiang.vn/wp-content/uploads/2021/07/banner-laptop-sinh-vien-scaled.jpg',
+    img: 'https://hienlaptop.com/wp-content/uploads/2022/06/LAPTOP-CU-THANH-LY.png',
     alt: 'Khuyến mãi mùa hè',
   },
   {
@@ -10,7 +10,7 @@ const banners = [
     alt: 'Giảm giá Gaming',
   },
   {
-    img: 'https://img.freepik.com/free-vector/hand-drawn-electronics-store-sale-banner-template_23-2151138129.jpg?semt=ais_hybrid&w=740',
+    img: 'https://thuancomputer.com/wp-content/uploads/2025/06/banner-home-mini-01.png',
     alt: 'Laptop giá tốt',
   },
 ]
@@ -32,11 +32,11 @@ export default function Banner() {
   const next = () => setIdx((idx + 1) % banners.length)
 
   return (
-    <div className="w-full mb-6 relative rounded-2xl overflow-hidden shadow-lg" style={{ minHeight: '220px' }}>
+    <div className="w-full mb-6 relative overflow-hidden shadow-lg" style={{ minHeight: '220px' }}>
       <img
         src={banners[idx].img}
         alt={banners[idx].alt}
-        className="w-full h-[220px] md:h-[320px] lg:h-[360px] object-cover object-center transition-all duration-700"
+        className="w-full h-[220px] sm:h-[320px] md:h-[420px] lg:h-[650px] object-cover object-center transition-all duration-700"
         loading="lazy"
         draggable={false}
       />
