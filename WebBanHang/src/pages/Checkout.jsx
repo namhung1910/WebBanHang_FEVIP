@@ -46,6 +46,10 @@ const Checkout = () => {
     setOrder(orderData);
     setIsModalOpen(true);
     clearCart();
+    // Lưu đơn hàng vào localStorage
+    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    orders.push(orderData);
+    localStorage.setItem('orders', JSON.stringify(orders));
   };
 
   const handleModalClose = () => {
