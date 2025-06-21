@@ -13,7 +13,9 @@ export default function Home() {
   const [filters, setFilters] = useState({ categories: [], price: '' })
   const [searchKeyword, setSearchKeyword] = useState('')
 
+  //xây logic lọc sản phẩm
   const applyFilter = () => {
+    //kiểm tra xem có bộ lọc nào đang hoạt động
     const noCategory = filters.categories.length === 0
     const noPrice = filters.price === ''
     const noBrand = !selectedBrand
@@ -42,7 +44,7 @@ export default function Home() {
         result = result.filter(p => p.price > 35000000)
       }
     }
-
+    //lọc danh sách sp theo từ khóa được header trả về
     if (!noSearch) {
       const keyword = searchKeyword.toLowerCase()
       result = result.filter(p =>
@@ -57,6 +59,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+      {/*nhận từ khóa tìm kiếm từ Header*/}
       <Header onSearch={setSearchKeyword} />
       <Nav />
       <Banner />
