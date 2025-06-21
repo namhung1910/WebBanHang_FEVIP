@@ -65,7 +65,7 @@ export default function Header({ onSearch }) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Lưu vào lịch sử
+  // Lưu vào lịch sử bằng local storage
   const saveToHistory = (keyword) => {
     let updated = [...history]
     const exist = updated.indexOf(keyword)
@@ -75,37 +75,38 @@ export default function Header({ onSearch }) {
     setHistory(updated)
     localStorage.setItem('searchHistory', JSON.stringify(updated))
   }
-
+  // Xử lý khi nhấn vào gợi ý
   const handleSuggestionClick = (item) => {
     setSearchKeyword(item.name)
     setSuggestions([])
     setDropdownOpen(false)
     saveToHistory(item.name)
-    onSearch(item.name)
+    onSearch(item.name) // trả từ khóa tìm kiếm về home
   }
 
+  //Tìm kiếm theo từ khóa
   const handleSearchClick = () => {
     const keyword = searchKeyword.trim()
     if (keyword === '') {
       setSuggestions([])
       setDropdownOpen(false)
-      onSearch('')
+      onSearch('') // Để trống mà nhấn tìm thì trả về tất cả sản phẩm
       return
     }
 
     saveToHistory(keyword)
-    onSearch(keyword)
+    onSearch(keyword) // Trả từ khóa tìm kiếm về home
     setSuggestions([])
     setDropdownOpen(false)
   }
-
+  // Xử lý khi nhấn vào lịch sử tìm kiếm
   const handleHistoryClick = (keyword) => {
     setSearchKeyword(keyword)
     saveToHistory(keyword)
-    onSearch(keyword)
+    onSearch(keyword) //trả từ khóa tìm kiếm về home
     setDropdownOpen(false)
   }
-
+  // Xử lý xóa lịch sử tìm kiếm,cập nhật state và localStorage
   const handleDeleteHistory = (keyword) => {
     const updated = history.filter(item => item !== keyword)
     setHistory(updated)

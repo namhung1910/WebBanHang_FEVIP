@@ -3,7 +3,7 @@ import Home from './pages/Home'
 import Shop from './pages/Shop'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
-import { CartProvider } from './context/CartContext' // Thêm dòng này
+import { CartProvider } from './context/CartContext' 
 
 export default function App() {
   return (
